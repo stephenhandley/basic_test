@@ -1,5 +1,5 @@
 export const schema = {
-    "project_id": "26b198d8-a464-486d-bcae-63455f001763",
+    // "project_id": "26b198d8-a464-486d-bcae-63455f001763",
     "tables": {
       "post": {
         "type": "collection",
