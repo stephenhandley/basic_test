@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from 'react'
-import { useBasicMutation } from '../hooks/api'
+import { useMutation } from '../hooks/useMutation'
 
 interface PostFormProps {
   post?: {
@@ -14,20 +13,15 @@ interface PostFormProps {
 }
 
 export function PostForm({ post, isEdit, onSuccess }: PostFormProps) {
-  const { 
-    mutate: createPost, 
-    loading: createLoading,
-  } = useBasicMutation({ 
-    path: 'post', 
-    method: 'POST' 
+  const { mutate: createPost, loading: createLoading } = useMutation({ 
+    collection: "post",
+    action: "create"
   })
   
-  const { 
-    mutate: updatePost, 
-    loading: updateLoading,
-  } = useBasicMutation({ 
-    path: post ? `post/${post.id}` : 'posts', 
-    method: 'PATCH' 
+  const { mutate: updatePost, loading: updateLoading } = useMutation({ 
+    collection: "post",
+    action: 'update',
+    id: post?.id
   })
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

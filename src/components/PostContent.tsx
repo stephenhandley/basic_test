@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import { useBasic } from '@basictech/react'
 import { useIsAdminSignedIn } from '../hooks/admin'
-import { useBasicQuery } from '../hooks/api'
+import { QuerySwitcher } from '../components/QuerySwitcher'
 import { PostComments } from './PostComments'
 import { PostForm } from './PostForm'
 
@@ -65,45 +65,52 @@ export function PostContent() {
   const { isSignedIn } = useBasic()
   const isAuthor = useIsAdminSignedIn()
   const [showForm, setShowForm] = useState(false)
-  const { data: posts, error, loading, refresh } = useBasicQuery({ path: 'post' })
   
-  if (loading) return <div>Loading posts...</div>
-  if (error) return <div className="text-red-600">Error: {error}</div>
-
-  // Sort posts by createdAt in descending order
-  const sortedPosts = posts?.sort((a, b) => 
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )
-
   return (
-    <>
-      {!showForm ? (
-        <button 
-          onClick={() => setShowForm(true)}
-          className="btn-primary mb-4"
-        >
-          Add Post
-        </button>
-      ) : (
-        <div className="mb-4">
-          <PostForm 
-            onSuccess={() => {
-              setShowForm(false);
-              refresh();
-            }} 
-          />
-        </div>
-      )}
+    <QuerySwitcher collection="post">
+      {(query) => {
+        const { data: posts, error, isLoading: loading, refetch } = query
+        
+        if (loading) return <div>Loading posts...</div>
+        if (error) return <div className="text-red-600">Error: {error}</div>
 
-      {sortedPosts?.length > 0 ? posts?.map((post: Post) => (
-        <PostItem 
-          key={post.id} 
-          post={post} 
-          isAuthor={isAuthor} 
-          isSignedIn={isSignedIn}
-          onUpdate={refresh}
-        />
-      )) : <div>No posts</div>}
-    </>
+        // Sort posts by createdAt in descending order
+        const sortedPosts = posts?.sort((a: any, b: any) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+
+        return (
+          <>
+            {!showForm ? (
+              <button 
+                onClick={() => setShowForm(true)}
+                className="btn-primary mb-4"
+              >
+                Add Post
+              </button>
+            ) : (
+              <div className="mb-4">
+                <PostForm 
+                  onSuccess={() => {
+                    setShowForm(false);
+                    refetch();
+                  }} 
+                />
+              </div>
+            )}
+
+            {sortedPosts?.length > 0 ? posts?.map((post: Post) => (
+              <PostItem 
+                key={post.id} 
+                post={post} 
+                isAuthor={isAuthor} 
+                isSignedIn={isSignedIn}
+                onUpdate={refetch}
+              />
+            )) : <div>No posts</div>}
+          </>
+        )
+      }}
+    </QuerySwitcher>
   )
 } 

@@ -1,12 +1,13 @@
 import { useBasic } from '@basictech/react'
 import { Header } from './components/Header'
 import { PostList } from './components/PostList'
+import { DataProvider } from './context/DataContext'
 
 function App() {
   const { isAuthReady, isSignedIn } = useBasic()
 
   return (
-    <div>
+    <DataProvider>
       {isAuthReady ? (
         <>
           <Header />
@@ -21,7 +22,7 @@ function App() {
           <div className="text-gray-600">Loading...</div>
         </div>
       )}
-    </div>
+    </DataProvider>
   )
 }
 

@@ -14,7 +14,7 @@ const projectSchema = {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BasicProvider schema={projectSchema} project_id={projectId} debug>
+    <BasicProvider schema={projectSchema} project_id={projectId}>
       <App />
     </BasicProvider>
   </React.StrictMode>

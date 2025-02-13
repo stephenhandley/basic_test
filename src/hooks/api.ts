@@ -2,53 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useBasic } from '@basictech/react'
+import { 
+    convertKeysToCamelCase, 
+    convertKeysToSnakeCase 
+} from '../utils/casing'
 
 const baseUri = `/api/account/${import.meta.env.VITE_BASIC_PROJECT_ID}/db`
 
-// Utility functions for case conversion
-function toCamelCase(str: string): string {
-    return str.replace(/_([a-z])/g, (g) => g[1].toUpperCase())
-}
-
-function toSnakeCase(str: string): string {
-    return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
-}
-
-function convertKeysToCamelCase(obj: any): any {
-    if (Array.isArray(obj)) {
-        return obj.map(convertKeysToCamelCase)
-    }
-    
-    if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((result, key) => {
-            const camelKey = toCamelCase(key)
-            const value = obj[key]
-            result[camelKey] = convertKeysToCamelCase(value)
-            return result
-        }, {} as any)
-    }
-    
-    return obj
-}
-
-function convertKeysToSnakeCase(obj: any): any {
-    if (Array.isArray(obj)) {
-        return obj.map(convertKeysToSnakeCase)
-    }
-    
-    if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((result, key) => {
-            const snakeKey = toSnakeCase(key)
-            const value = obj[key]
-            result[snakeKey] = convertKeysToSnakeCase(value)
-            return result
-        }, {} as any)
-    }
-    
-    return obj
-}
-
-interface useBasicApiProps {
+interface useApiProps {
     path: string,
     method?: string,
 }
@@ -102,7 +63,7 @@ export async function fetchApi({ token, path, method, body }: fetchApiProps) {
     }
 }
 
-export function useBasicQuery({ path, method = "GET" }: useBasicApiProps) {
+export function useApiQuery({ path, method = "GET" }: useApiProps) {
     const basic = useBasic()
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
@@ -136,10 +97,10 @@ export function useBasicQuery({ path, method = "GET" }: useBasicApiProps) {
         }
     }, [fetchData])
 
-    return { data, error, loading, refresh: fetchData }
+    return { data, error, loading, refetch: fetchData }
 }
 
-export function useBasicMutation({ path, method = "POST" }: useBasicApiProps) {
+export function useApiMutation({ path, method = "POST" }: useApiProps) {
     const basic = useBasic()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
