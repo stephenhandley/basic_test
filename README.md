@@ -37,11 +37,11 @@ Trying out [basic.tech](https://basic.tech) with a very basic blog + comment sch
 # Setup
 
 ```bash
-npm instal;
+npm install;
 cp .env.example .env
 ```
 
-Then set project details in [.env](./.env) based on [.env.example](./.env.example)
+Then set variables in [.env](./.env)
 
 # Run
 ```bash
