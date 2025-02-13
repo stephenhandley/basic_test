@@ -1,35 +1,24 @@
 import { useBasic } from '@basictech/react'
+import { Header } from './components/Header'
 import { PostList } from './components/PostList'
-import './App.css'
 
 function App() {
-  const basic = useBasic()
-
-  console.log("dbStatus", basic.dbStatus, basic.db);
-
-  const isReady = basic.isAuthReady && basic.dbStatus == "ONLINE"
+  const { isAuthReady, isSignedIn } = useBasic()
 
   return (
-    <div className="app">
-      <header>
-        {basic.isSignedIn ? (
-          <div className="auth">
-            <p>Signed in as: {basic.user?.email}</p>
-            <button onClick={basic.signout}>Sign Out</button>
-          </div>
-        ) : (
-          <button onClick={basic.signin}>Sign In</button>
-        )}
-      </header>
-
-      { isReady ? (
-        <main>
-          <PostList />
-        </main>
+    <div>
+      {isAuthReady ? (
+        <>
+          <Header />
+          {isSignedIn && (
+            <main className="max-w-5xl mx-auto p-5">
+              <PostList />
+            </main>
+          )}
+        </>
       ) : (
-        <div>
-          <div>Loading...</div>
-          <pre>{JSON.stringify(basic, null, 1)}</pre>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-gray-600">Loading...</div>
         </div>
       )}
     </div>

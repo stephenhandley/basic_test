@@ -12,8 +12,6 @@ const projectSchema = {
   project_id: projectId
 }
 
-console.log("schema", schema);
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BasicProvider schema={projectSchema} project_id={projectId} debug>
