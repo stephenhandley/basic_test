@@ -28,5 +28,5 @@ export const schema = {
         }
       }
     },
-    "version": 0
+    "version": 1
   }

@@ -29,7 +29,6 @@ function App() {
       ) : (
         <div>
           <div>Loading...</div>
-          <pre>{JSON.stringify(basic, null, 1)}</pre>
         </div>
       )}
     </div>
